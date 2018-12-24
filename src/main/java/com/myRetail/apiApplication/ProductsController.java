@@ -33,15 +33,4 @@ public class ProductsController {
     	    	
     	return productResource;
     }
-    
-    @RequestMapping(method=RequestMethod.POST, value="/products/{id}")
-    public Price CreateProduct(RestTemplate restTemplate, @PathVariable Long id) {
-    	Price price = new Price();
-    	price.id = id;
-    	price.currencyCode = "USD";
-    	price.value = 22.22;
-    	repository.save(price);
-    	return price;
-    }
-    
 }

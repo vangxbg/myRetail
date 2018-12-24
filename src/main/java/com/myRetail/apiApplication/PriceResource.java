@@ -1,25 +1,11 @@
 package com.myRetail.apiApplication;
 
-import org.springframework.data.annotation.Id;
+public class PriceResource {
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Price {
-	@Id
-	public Long id;
 	public Double value;
 	public String currencyCode;
 	
-	public Price() {
-	}
-	
-	public Long getId() {
-		return id;
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
+	public PriceResource() {
 	}
 	
 	public void setValue(Double value) {

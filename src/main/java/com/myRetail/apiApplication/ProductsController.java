@@ -13,26 +13,35 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductsController {
 	
 	@Autowired
-	private ProductRepository repository;
-	
+	private PriceRepository repository;
+    
     @RequestMapping(method=RequestMethod.GET, value="/products/{id}")
-    public String GetProduct(RestTemplate restTemplate, @PathVariable Long id) {
-    	ExternalApi externalApi = restTemplate.getForObject("https://redsky.target.com/v2/pdp/tcin/13860428?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics", ExternalApi.class);
-    	return externalApi.product.item.product_description.title;
-//    	return repository.findById(id);
+    public ProductResource GetProduct(RestTemplate restTemplate, @PathVariable Long id) {
+    	
+    	Price price = repository.findById(id).get();
+    	
+    	PriceResource priceResource = new PriceResource();
+    	priceResource.currencyCode = price.getCurrencyCode();
+    	priceResource.value = price.getValue();
+    	
+    	ProductResource productResource = new ProductResource();
+    	productResource.id = price.getId();
+    	productResource.price = priceResource;
+    	
+    	ExternalResource externalResource = restTemplate.getForObject("https://redsky.target.com/v2/pdp/tcin/13860428?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics", ExternalResource.class);
+    	productResource.name = externalResource.product.item.product_description.title; 	
+    	    	
+    	return productResource;
     }
     
     @RequestMapping(method=RequestMethod.POST, value="/products/{id}")
-    public Product CreateProduct(RestTemplate restTemplate, @PathVariable Long id) {
-    	Product testProduct = new Product();
-    	testProduct.id = id;
-    	testProduct.name = "Test Movie";
+    public Price CreateProduct(RestTemplate restTemplate, @PathVariable Long id) {
     	Price price = new Price();
-    	price.value = 55.52;
+    	price.id = id;
     	price.currencyCode = "USD";
-    	testProduct.price = price;
-    	repository.save(testProduct);
-    	return testProduct;
+    	price.value = 22.22;
+    	repository.save(price);
+    	return price;
     }
     
 }

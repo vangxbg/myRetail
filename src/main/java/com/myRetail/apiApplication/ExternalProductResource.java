@@ -3,18 +3,18 @@ package com.myRetail.apiApplication;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ExternalProduct {
-	Item item;
+public class ExternalProductResource {
+	ExternalItemResource item;
 	
-	public ExternalProduct() {
+	public ExternalProductResource() {
 		
 	}
 	
-	public Item getItem() {
+	public ExternalItemResource getItem() {
 		return item;
 	}
 	
-	public void setItem(Item item) {
+	public void setItem(ExternalItemResource item) {
 		this.item = item;
 	}
 }

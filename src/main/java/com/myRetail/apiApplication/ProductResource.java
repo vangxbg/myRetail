@@ -1,15 +1,12 @@
 package com.myRetail.apiApplication;
 
-import org.springframework.data.annotation.Id;
+public class ProductResource {
 
-public class Product {
-
-    @Id
     public Long id;
     public String name;
-    public Price price;
+    public PriceResource price;
 
-    public Product() {}
+    public ProductResource() {}
     
     public void setId(Long id) {
     	this.id = id;
@@ -19,7 +16,7 @@ public class Product {
     	this.name = name;
     }
     
-    public void setPrice(Price price) {
+    public void setPrice(PriceResource price) {
     	this.price = price;
     }
     
@@ -31,7 +28,7 @@ public class Product {
     	return name;
     }   
     
-    public Price getPrice() {
+    public PriceResource getPrice() {
     	return price;
     }    
 

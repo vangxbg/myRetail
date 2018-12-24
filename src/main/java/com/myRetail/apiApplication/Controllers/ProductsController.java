@@ -1,5 +1,11 @@
-package com.myRetail.apiApplication;
+package com.myRetail.apiApplication.Controllers;
 import org.springframework.web.client.RestTemplate;
+
+import com.myRetail.apiApplication.Controllers.Resources.ExternalResource;
+import com.myRetail.apiApplication.Controllers.Resources.PriceResource;
+import com.myRetail.apiApplication.Controllers.Resources.ProductResource;
+import com.myRetail.apiApplication.Models.Price;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;

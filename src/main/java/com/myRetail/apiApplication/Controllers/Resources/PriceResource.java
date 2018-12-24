@@ -1,4 +1,4 @@
-package com.myRetail.apiApplication;
+package com.myRetail.apiApplication.Controllers.Resources;
 
 public class PriceResource {
 

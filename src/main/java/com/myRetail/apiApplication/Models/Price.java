@@ -1,14 +1,15 @@
 package com.myRetail.apiApplication.Models;
 
+import java.math.BigDecimal;
+
 import org.springframework.data.annotation.Id;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Price {
 	@Id
 	public Long id;
-	public Double value;
+	public BigDecimal value;
 	public String currencyCode;
 	
 	public Price() {
@@ -22,7 +23,7 @@ public class Price {
 		this.id = id;
 	}
 	
-	public void setValue(Double value) {
+	public void setValue(BigDecimal value) {
 		this.value = value;
 	}
 	
@@ -30,7 +31,7 @@ public class Price {
 		this.currencyCode = currencyCode;
 	}
 	
-	public Double getValue() {
+	public BigDecimal getValue() {
 		return value;
 	}
 	

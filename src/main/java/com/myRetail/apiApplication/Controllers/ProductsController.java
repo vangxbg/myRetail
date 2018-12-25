@@ -1,14 +1,17 @@
 package com.myRetail.apiApplication.Controllers;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.myRetail.apiApplication.Controllers.Resources.ExternalResource;
 import com.myRetail.apiApplication.Controllers.Resources.PriceResource;
 import com.myRetail.apiApplication.Controllers.Resources.ProductResource;
 import com.myRetail.apiApplication.Models.Price;
 
-import java.util.EnumMap;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +38,7 @@ public class ProductsController {
     private ModelMapper modelMapper;
     
     @RequestMapping(method=RequestMethod.GET, value="/products/{id}")
-    public ProductResource GetProduct(RestTemplate restTemplate, @PathVariable Long id) {
+    public ResponseEntity<?> GetProduct(RestTemplate restTemplate, @PathVariable Long id) {
     	
     	Price price = priceRepository.findById(id).get();
     	
@@ -49,17 +52,21 @@ public class ProductsController {
     	productResource.name = externalResource.product.item.product_description.title; 
     	productResource.price = priceResource;	
     	    	
-    	return productResource;
+    	return new ResponseEntity<>(productResource, HttpStatus.OK);
     }
     
     @RequestMapping(method=RequestMethod.PUT, value="/products/{id}")
-    public ResponseEntity<?> UpdateProduct(RestTemplate restTemplate, @PathVariable Long id, @RequestBody PriceResource priceResource) {
+    public ResponseEntity<?> UpdateProduct(RestTemplate restTemplate, @PathVariable Long id, @RequestBody @Valid PriceResource priceResource) {
     	
     	Price price = priceRepository.findById(id).get();
     	
     	if(!currencyTypeRepository.findById(priceResource.currencyCode).isPresent()) {
     		return new ResponseEntity<>("That currency code does not exist, please try a different code", HttpStatus.BAD_REQUEST);
     	}
+    	
+    	// attempting to save entered price value with 2 precision, will need to be fixed
+    	BigDecimal twoPrecisionValue = new BigDecimal(priceResource.value.doubleValue()).setScale(2, RoundingMode.HALF_EVEN);
+    	priceResource.value = twoPrecisionValue;
     	
     	modelMapper.map(priceResource, price);
     	priceRepository.save(price);

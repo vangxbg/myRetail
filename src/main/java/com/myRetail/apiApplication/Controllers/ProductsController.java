@@ -15,6 +15,9 @@ import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,7 +48,13 @@ public class ProductsController {
     	PriceResource priceResource = new PriceResource();
     	modelMapper.map(price, priceResource);
     	
-    	ExternalResource externalResource = restTemplate.getForObject("https://redsky.target.com/v2/pdp/tcin/"+id+"?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics", ExternalResource.class);
+    	ExternalResource externalResource = null;
+    	try {
+    		externalResource = restTemplate.getForObject("https://redsky.target.com/v2/pdp/tcin/"+id+"?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics", ExternalResource.class);
+    	}
+    	catch(Exception e) {
+    		return new ResponseEntity<>("Internal error, was not able to fetch external api", HttpStatus.INTERNAL_SERVER_ERROR);
+    	}
     	
     	ProductResource productResource = new ProductResource();
     	productResource.id = id;
@@ -57,7 +66,7 @@ public class ProductsController {
     
     @RequestMapping(method=RequestMethod.PUT, value="/products/{id}")
     public ResponseEntity<?> UpdateProduct(RestTemplate restTemplate, @PathVariable Long id, @RequestBody @Valid PriceResource priceResource) {
-    	
+    
     	Price price = priceRepository.findById(id).get();
     	
     	if(!currencyTypeRepository.findById(priceResource.currencyCode).isPresent()) {
@@ -71,8 +80,13 @@ public class ProductsController {
     	modelMapper.map(priceResource, price);
     	priceRepository.save(price);
     	
-    	ExternalResource externalResource = restTemplate.getForObject("https://redsky.target.com/v2/pdp/tcin/"+id+"?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics", ExternalResource.class);
-    	
+    	ExternalResource externalResource = null;
+    	try {
+    		externalResource = restTemplate.getForObject("https://redsky.target.com/v2/pdp/tcin/"+id+"?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics", ExternalResource.class);
+    	}
+    	catch(Exception e) {
+    		return new ResponseEntity<>("Internal error, was not able to fetch external api", HttpStatus.INTERNAL_SERVER_ERROR);
+    	}
     	ProductResource productResource = new ProductResource();
     	productResource.id = id;
     	productResource.name = externalResource.product.item.product_description.title; 
@@ -80,4 +94,9 @@ public class ProductsController {
     	
     	return new ResponseEntity<>(productResource, HttpStatus.OK);
     }
+    
+	@Bean
+	public RestTemplate restTemplate(RestTemplateBuilder builder) {
+		return builder.build();
+	}
 }

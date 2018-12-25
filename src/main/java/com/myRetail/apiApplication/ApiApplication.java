@@ -19,9 +19,5 @@ public class ApiApplication {
 	    return new ModelMapper();
 	}
 	
-	@Bean
-	public RestTemplate restTemplate(RestTemplateBuilder builder) {
-		return builder.build();
-	}
 }
 

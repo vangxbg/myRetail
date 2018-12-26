@@ -1,13 +1,11 @@
-package com.myRetail.apiApplication.Controllers;
+package apiApplication.controller;
 import org.springframework.web.client.RestTemplate;
 
-import com.myRetail.apiApplication.ApiApplication;
-import com.myRetail.apiApplication.Controllers.Repository.CurrencyTypeRepository;
-import com.myRetail.apiApplication.Controllers.Repository.PriceRepository;
-import com.myRetail.apiApplication.Controllers.Resources.ExternalResource;
-import com.myRetail.apiApplication.Controllers.Resources.PriceResource;
-import com.myRetail.apiApplication.Controllers.Resources.ProductResource;
-import com.myRetail.apiApplication.Models.Price;
+import apiApplication.ApiApplication;
+import apiApplication.model.Price;
+import apiApplication.resource.ExternalResource;
+import apiApplication.resource.PriceResource;
+import apiApplication.resource.ProductResource;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

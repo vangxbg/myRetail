@@ -1,4 +1,4 @@
-package com.myRetail.apiApplication.Controllers.Resources;
+package apiApplication.resource;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

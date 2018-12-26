@@ -1,8 +1,8 @@
-package com.myRetail.apiApplication.Controllers.Repository;
+package apiApplication.controller;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.myRetail.apiApplication.Models.CurrencyType;
+import apiApplication.model.CurrencyType;
 
 public interface CurrencyTypeRepository extends MongoRepository<CurrencyType, String> {
 	

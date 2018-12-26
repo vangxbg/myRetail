@@ -1,4 +1,4 @@
-package com.myRetail.apiApplication.Controllers.Resources;
+package apiApplication.resource;
 import java.math.BigDecimal;
 
 import javax.validation.constraints.DecimalMin;

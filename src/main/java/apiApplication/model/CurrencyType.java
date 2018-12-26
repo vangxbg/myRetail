@@ -1,4 +1,4 @@
-package com.myRetail.apiApplication.Models;
+package apiApplication.model;
 
 import org.springframework.data.annotation.Id;
 

@@ -2,9 +2,8 @@ package com.myRetail.apiApplication.Models;
 
 import java.math.BigDecimal;
 
-import org.springframework.data.annotation.Id;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.data.annotation.Id;
 
 public class Price {
 	@Id

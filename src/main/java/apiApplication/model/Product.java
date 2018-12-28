@@ -1,23 +1,21 @@
 package apiApplication.model;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
 public class Product {
 	@Id
-	public Long id;
-	public String name;
-	public Price price;
+	private Integer id;
+	private String name;
+	private Price price;
 	
 	public Product() {
 	}
 	
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 	
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	

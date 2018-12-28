@@ -1,14 +1,12 @@
 package apiApplication.controller;
-import org.springframework.web.client.RestTemplate;
 
 import apiApplication.ApiApplication;
 import apiApplication.model.Price;
-import apiApplication.resource.ExternalResource;
+import apiApplication.repository.CurrencyTypeRepository;
+import apiApplication.repository.PriceRepository;
+import apiApplication.resource.External;
 import apiApplication.resource.PriceResource;
 import apiApplication.resource.ProductResource;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 import javax.validation.Valid;
 
@@ -17,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,58 +41,55 @@ public class ProductsController {
     private ModelMapper modelMapper;
     
     @RequestMapping(method=RequestMethod.GET, value="/products/{id}")
-    public ResponseEntity<?> GetProduct(RestTemplate restTemplate, @PathVariable Long id) {
+    public ResponseEntity<?> GetProduct(RestTemplate restTemplate, @PathVariable Integer id) {
     	
     	Price price = priceRepository.findById(id).get();
-    	
     	PriceResource priceResource = new PriceResource();
     	modelMapper.map(price, priceResource);
     	
-    	ExternalResource externalResource = null;
+    	External external = null;
     	try {
-    		externalResource = restTemplate.getForObject("https://redsky.target.com/v2/pdp/tcin/"+id+"?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics", ExternalResource.class);
+    		external = restTemplate.getForObject("https://redsky.target.com/v2/pdp/tcin/"+id+"?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics", External.class);
     	}
     	catch(Exception e) {
     		return new ResponseEntity<>("Internal error, was not able to fetch external api", HttpStatus.INTERNAL_SERVER_ERROR);
     	}
-    	
     	ProductResource productResource = new ProductResource();
-    	productResource.id = id;
-    	productResource.name = externalResource.product.item.product_description.title; 
-    	productResource.price = priceResource;	
+    	productResource.setId(id);
+    	// can create a custom mapper if more information is mapped in the future
+    	productResource.setName(external.getProduct().getItem().getProduct_description().getTitle());
+    	productResource.setPrice(priceResource);
     	    	
     	return new ResponseEntity<>(productResource, HttpStatus.OK);
     }
     
     @RequestMapping(method=RequestMethod.PUT, value="/products/{id}")
-    public ResponseEntity<?> UpdateProduct(RestTemplate restTemplate, @PathVariable Long id, @RequestBody @Valid PriceResource priceResource) {
-    
-    	Price price = priceRepository.findById(id).get();
-    	
-    	if(!currencyTypeRepository.findById(priceResource.currencyCode).isPresent()) {
+    public ResponseEntity<?> UpdateProduct(RestTemplate restTemplate, @PathVariable Integer id, @RequestBody @Valid PriceResource priceResource) {
+    	    	
+    	// making another call to the database to make sure currencyCode is valid (may need to be re-implemented to not make another database call)
+    	if(!currencyTypeRepository.findById(priceResource.getCurrencyCode()).isPresent()) {
     		ResponseEntity<?> responseEntity = new ResponseEntity<>("That currency code does not exist, please try a different code", HttpStatus.BAD_REQUEST);
     		LOGGER.warn(String.format("Welcome to %s!", responseEntity), responseEntity);
     		return responseEntity;
     	}
-    	
-    	// attempting to save entered price value with 2 precision, will need to be fixed
-    	BigDecimal twoPrecisionValue = new BigDecimal(priceResource.value.doubleValue()).setScale(2, RoundingMode.HALF_EVEN);
-    	priceResource.value = twoPrecisionValue;
-    	
+    	Price price = priceRepository.findById(id).get();
     	modelMapper.map(priceResource, price);
     	priceRepository.save(price);
     	
-    	ExternalResource externalResource = null;
+    	// we may choose not to return this back to the user if not neccesary.
+    	External external = null;
     	try {
-    		externalResource = restTemplate.getForObject("https://redsky.target.com/v2/pdp/tcin/"+id+"?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics", ExternalResource.class);
+    		external = restTemplate.getForObject("https://redsky.target.com/v2/pdp/tcin/"+id+"?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics", External.class);
     	}
     	catch(Exception e) {
     		return new ResponseEntity<>("Internal error, was not able to fetch external api", HttpStatus.INTERNAL_SERVER_ERROR);
     	}
     	ProductResource productResource = new ProductResource();
-    	productResource.id = id;
-    	productResource.name = externalResource.product.item.product_description.title; 
-    	productResource.price = priceResource;	    	
+    	productResource.setId(id);
+    	// can create a custom mapper if more information is mapped in the future
+    	productResource.setName(external.getProduct().getItem().getProduct_description().getTitle());
+    	productResource.setPrice(priceResource);	
+
     	
     	return new ResponseEntity<>(productResource, HttpStatus.OK);
     }

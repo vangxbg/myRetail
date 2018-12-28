@@ -3,16 +3,16 @@ package apiApplication.resource;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ExternalResource {
-	public ExternalProductResource product;
+public class External {
+	private ExternalProduct product;
 	
-	public ExternalResource() {}
+	public External() {}
 	
-	public Object getProduct() {
+	public ExternalProduct getProduct() {
 		return product;
 	}
 	
-	public void setProduct(ExternalProductResource product) {
+	public void setProduct(ExternalProduct product) {
 		this.product = product;
 	}
 	

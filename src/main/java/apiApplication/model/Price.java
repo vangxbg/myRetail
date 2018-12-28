@@ -2,28 +2,29 @@ package apiApplication.model;
 
 import java.math.BigDecimal;
 
-
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "prices")
 public class Price {
 	@Id
-	public Long id;
-	public BigDecimal value;
-	public String currencyCode;
+	private Integer id;
+	private BigDecimal value;
+	private String currencyCode;
 	
 	public Price() {
 	}
 	
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 	
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	
 	public void setValue(BigDecimal value) {
-		this.value = value;
+		this.value = value.setScale(2);
 	}
 	
 	public void setCurrencyCode(String currencyCode) {

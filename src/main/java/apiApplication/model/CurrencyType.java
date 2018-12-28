@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 public class CurrencyType {
 	
 	@Id
-	public String id;
+	private String id;
 	
 	public CurrencyType() {
 	}

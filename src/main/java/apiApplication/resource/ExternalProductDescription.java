@@ -3,10 +3,10 @@ package apiApplication.resource;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ExternalProductDescriptionResource {
-	public String title;
+public class ExternalProductDescription {
+	private String title;
 	
-	public ExternalProductDescriptionResource() {
+	public ExternalProductDescription() {
 		
 	}
 	

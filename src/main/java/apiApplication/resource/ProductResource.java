@@ -2,13 +2,13 @@ package apiApplication.resource;
 
 public class ProductResource {
 
-    public Long id;
-    public String name;
-    public PriceResource price;
+    private Integer id;
+    private String name;
+    private PriceResource price;
 
     public ProductResource() {}
     
-    public void setId(Long id) {
+    public void setId(Integer id) {
     	this.id = id;
     }
     
@@ -20,7 +20,7 @@ public class ProductResource {
     	this.price = price;
     }
     
-    public Long getId() {
+    public Integer getId() {
     	return id;
     }
     

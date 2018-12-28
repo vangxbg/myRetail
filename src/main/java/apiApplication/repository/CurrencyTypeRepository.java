@@ -1,4 +1,4 @@
-package apiApplication.controller;
+package apiApplication.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 

@@ -7,18 +7,18 @@ import javax.validation.constraints.NotNull;
 
 public class PriceResource {
 	@NotNull(message="you must enter an amount for value")
-	@DecimalMin("0.01")
+	@DecimalMin(".01")
 	@Digits(integer=10, fraction=2)
-	public BigDecimal value;
-	public String currencyCode;
+	private BigDecimal value;
+	private String currencyCode;
 	
 	public PriceResource() {
 	}
 	
 	public void setValue(BigDecimal value) {
-		this.value = value;
+		this.value = value.setScale(2);
 	}
-	
+
 	public void setCurrencyCode(String currencyCode) {
 		this.currencyCode = currencyCode;
 	}

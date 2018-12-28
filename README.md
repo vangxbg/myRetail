@@ -58,6 +58,7 @@ This will run the application on:
 }
 ```
 * Example of a bad request:
+![alt text](https://github.com/vangxbg/myRetail/blob/master/putRequest.png)<br>
 
 * You can also make a get call to http://localhost:8080/api/async/products to retrieve all the products and this is based on an asynchronous architecture.  The idea is that a products collection is also stored in mongo db so that you don't have to constantly make calls to the external api at each request.  (This implementation is not yet completed but you can retrieve sample products from this endpoint)
 

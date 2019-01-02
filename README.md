@@ -19,7 +19,7 @@ You can clone this project using git clone https://github.com/vangxbg/myRetail.g
 To download the dependencies, run this from the root of the project:
 
 ```bash
-$ dotnet restore
+$ ./mvnw clean package
 ```
 
 ## Serving the project
